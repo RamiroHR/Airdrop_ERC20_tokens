@@ -1,0 +1,26 @@
+# Dependencies
+node_modules
+package-lock.json
+
+# Static assets
+public
+
+# Testing
+coverage
+
+# Local env files
+.env
+.env.example
+
+# Next.js
+.next/
+build
+dist
+*.min.js    # minified files generated
+*.min.css   # during build process
+
+# Vercel
+.vercel
+
+# TypeScript
+next-env.d.ts

@@ -18,11 +18,13 @@
     "react-dom": "^18"
   },
   "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^6.0.0",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "@typescript-eslint/eslint-plugin": "^8.34.1",
     "@typescript-eslint/parser": "^8.34.1",
+    "dotenv": "^16.5.0",
     "eslint": "^8",
     "eslint-config-next": "14.2.28",
     "eslint-config-prettier": "^10.1.5",
@@ -32,6 +34,7 @@
     "eslint-plugin-prettier": "^5.5.0",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-tailwindcss": "^3.18.0",
+    "hardhat": "^2.25.0",
     "husky": "^9.1.7",
     "postcss": "^8",
     "prettier": "^3.5.3",

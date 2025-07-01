@@ -35,7 +35,9 @@ airdrop-erc20-tokens/
 ├── README.md                 # Main project documentation
 ├── .husky/                   # husky pre-commit hook
 │
-├── contracts/                # Hardhat project (Solidity smart contracts)
+├── contracts/                # Solidity smart contracts
+│
+├── ignition/                 # Hardhat contract deployment scripts
 │
 ├── prisma/                   # Prisma schema and migrations (PostgreSQL database)
 │
@@ -57,6 +59,8 @@ airdrop-erc20-tokens/
 │   ├── contracts/            # Smart contract tests
 │   └── api/                  # API route tests
 │
+├── scripts/                  # Hardhat utility functions
+│
 ├── public/                   # Static assets (images, etc.)
 │   ├── token-logo.png
 │   └── app-logo.png
@@ -67,7 +71,7 @@ airdrop-erc20-tokens/
 ├── .editorconfig             # Editor configuration
 ├── .eslintrc.json            # ESLint configuration
 ├── .prettierrc.json          # Prettier configuration
-├── .prettierignore           # Files that do not need to be formatted (better performance, avoid conflicts)
+├── .prettierignore           # For better prettier performance & avoid conflicts
 ├── package.json              # Project dependencies and scripts
 ├── package-lock.json         # Locked dependencies
 ├── next-env.d.ts             # Next.js boilerplate TypeScript declarations

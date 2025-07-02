@@ -52,3 +52,4 @@ ignition/deployments/chain-31337
 # temp files and tests
 test_accounts.txt
 temptest_3.txt
+test/Lock.js

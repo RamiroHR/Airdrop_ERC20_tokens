@@ -5,7 +5,7 @@ require('@nomicfoundation/hardhat-ignition-ethers');
 require('dotenv/config');
 
 /** @type import('hardhat/config').HardhatUserConfig */
-const config = {
+module.exports = {
   solidity: {
     version: '0.8.20',
     settings: {
@@ -45,5 +45,3 @@ const config = {
     currency: 'USD'
   }
 };
-
-module.exports = config;

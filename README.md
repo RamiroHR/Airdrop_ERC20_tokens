@@ -82,7 +82,8 @@ airdrop-erc20-tokens/
 │   └── app-logo.png
 │
 ├── .nvmrc                    # Node version manager config
-├── .env                      # environmental variables and configurations
+├── .env                      # default environmental variables and configurations
+├── .env.local.example        # template for additional variables in local|tesnet|mainnet environment
 ├── .gitignore                # Git ignore rules
 ├── .editorconfig             # Editor configuration
 ├── .eslintrc.json            # ESLint configuration

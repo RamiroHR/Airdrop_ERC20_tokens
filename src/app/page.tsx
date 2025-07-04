@@ -1,5 +1,6 @@
 import { ConnectWallet } from '@/components/ConnectWallet';
 import { TokenBalance } from '@/components/TokenBalance';
+import { UserAirdrop } from '@/components/UserAirdrop';
 
 export default function Home() {
   return (
@@ -10,6 +11,7 @@ export default function Home() {
         <div className="space-y-4">
           <ConnectWallet />
           <TokenBalance />
+          <UserAirdrop />
         </div>
       </div>
     </div>

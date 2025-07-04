@@ -1,13 +1,14 @@
 'use client';
 
 import { useAccount, useBalance, useReadContracts } from 'wagmi';
-import { erc20Abi, formatUnits } from 'viem';
+import { formatUnits } from 'viem';
 import { useState, useEffect } from 'react';
+import { CONTRACTS } from '@/config/contracts';
 
 export function TokenBalance() {
   const [visible, setVisible] = useState(false);
   const [mounted, setMounted] = useState(false);
-  const tokenAddress = '0x5FbDB2315678afecb367f032d93F642f64180aa3';
+  const tokenAddress = CONTRACTS.TOKEN.address;
   const { address, isConnected } = useAccount();
 
   useEffect(() => {
@@ -24,18 +25,18 @@ export function TokenBalance() {
       ? [
           {
             address: tokenAddress,
-            abi: erc20Abi,
+            abi: CONTRACTS.TOKEN.abi,
             functionName: 'balanceOf',
             args: [address]
           },
           {
             address: tokenAddress,
-            abi: erc20Abi,
+            abi: CONTRACTS.TOKEN.abi,
             functionName: 'decimals'
           },
           {
             address: tokenAddress,
-            abi: erc20Abi,
+            abi: CONTRACTS.TOKEN.abi,
             functionName: 'symbol'
           }
         ]
@@ -76,7 +77,12 @@ export function TokenBalance() {
           {tokenResult.error && <p>Error: {tokenResult.error.message}</p>}
           {tokenResult.data && (
             <p>
-              Token: {formatBalance(tokenResult.data[0] ?? 0n, tokenResult.data[1] ?? 18, tokenResult.data[2] ?? 'DEV')}
+              Token:{' '}
+              {formatBalance(
+                (tokenResult.data[0] as bigint) ?? 0n,
+                (tokenResult.data[1] as number) ?? 18,
+                (tokenResult.data[2] as string) ?? 'DEV'
+              )}
             </p>
           )}
         </div>

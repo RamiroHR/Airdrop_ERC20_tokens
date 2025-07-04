@@ -29,7 +29,8 @@
     "**/*.js",
     ".next/types/**/*.ts",
     "hardhat.config.cjs",
-    "test/Airdrop.js"
+    "test/Airdrop.js",
+    "src/types/*.d.ts"
   ],
   "exclude": ["node_modules"]
 }

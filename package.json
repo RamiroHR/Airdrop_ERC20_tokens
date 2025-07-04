@@ -4,13 +4,15 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "npm run copy-abis && next build",
     "start": "next start",
     "lint": "next lint --fix",
     "lint:check": "next lint",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "prepare": "husky"
+    "prepare": "husky",
+    "copy-abis": "node scripts/copy-abis.js",
+    "compile": "npx hardhat compile && npm run copy-abis"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.81.2",

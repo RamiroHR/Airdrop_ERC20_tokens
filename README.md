@@ -101,6 +101,59 @@ airdrop-erc20-tokens/
 
 <br>
 
+# Setup Environmental Variables
+
+This project uses environment-specific configuration files. Follow the template to set up your environment.
+
+## Quick Setup
+
+1. **Choose your environment** and copy the template:
+
+   ```bash
+   # For local development
+   cp .env.local.example .env.local
+
+   # For testnet deployment
+   cp .env.local.example .env.development
+
+   # For mainnet deployment
+   cp .env.local.example .env.production
+   ```
+
+2. **Edit your environment file** following the instructions in the template:
+   - Keep only the sections you need for your environment
+   - Delete or comment out unused sections
+   - Fill in your actual values
+
+3. **Deploy contracts** to get addresses:
+   ```bash
+   npx hardhat ignition deploy ignition/modules/Airdrop.js
+   # Copy the addresses to your environment file
+   ```
+
+### **Environment-Specific Setup**:
+
+#### Local Development (`.env.local`)
+
+- ✅ Keep: Contract addresses, local network settings
+- ❌ Delete: RPC URLs, private keys, API keys
+
+#### Testnet Deployment (`.env.development`)
+
+- ✅ Keep: Contract addresses, Sepolia RPC URL, private key, Etherscan API key
+- ❌ Delete: Local network settings, mainnet settings
+
+#### Mainnet Deployment (`.env.production`)
+
+- ✅ Keep: Contract addresses, mainnet RPC URL, private key, Etherscan API key
+- ❌ Delete: Local network settings, testnet settings
+
+## Security Notes
+
+- ⚠️ **Never commit** environment files with secrets
+- ⚠️ **Keep private keys secure** - only use for deployment
+- ✅ The base `.env` file is safe to commit
+
 # Testing
 
 ## Running Tests

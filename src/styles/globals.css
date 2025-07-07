@@ -25,3 +25,52 @@ body {
     text-wrap: balance;
   }
 }
+
+/* Flame animations */
+@keyframes flicker {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+  25% {
+    opacity: 0.8;
+    transform: scale(1.1) rotate(2deg);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(0.95) rotate(-1deg);
+  }
+  75% {
+    opacity: 0.85;
+    transform: scale(1.05) rotate(1deg);
+  }
+}
+
+@keyframes flickerRight {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg) scaleX(-1);
+  }
+  25% {
+    opacity: 0.8;
+    transform: scale(1.1) rotate(-2deg) scaleX(-1);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(0.95) rotate(1deg) scaleX(-1);
+  }
+  75% {
+    opacity: 0.85;
+    transform: scale(1.05) rotate(-1deg) scaleX(-1);
+  }
+}
+
+.flame-left {
+  animation: flicker 2s ease-in-out infinite;
+}
+
+.flame-right {
+  animation: flickerRight 2.3s ease-in-out infinite;
+}

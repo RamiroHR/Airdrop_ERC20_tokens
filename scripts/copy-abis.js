@@ -28,7 +28,8 @@ contracts.forEach(contract => {
 
   if (fs.existsSync(artifactPath)) {
     const artifact = JSON.parse(fs.readFileSync(artifactPath, 'utf8'));
-    fs.writeFileSync(outputPath, JSON.stringify(artifact.abi, null, 2));
+    const jsonContent = JSON.stringify(artifact.abi, null, 2) + '\n';
+    fs.writeFileSync(outputPath, jsonContent);
     console.log(`Copied ABI for ${contract.name} to ${contract.outputPath}`);
   } else {
     console.warn(`Artifact not found: ${artifactPath}`);

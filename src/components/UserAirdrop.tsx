@@ -1,6 +1,7 @@
 'use client';
 
 import { useAccount, useReadContracts, useWriteContract, useWaitForTransactionReceipt } from 'wagmi';
+import { CheckCircle, XCircle, Loader2, ExternalLink, X } from 'lucide-react';
 import { useQueryClient } from '@tanstack/react-query';
 import { formatUnits } from 'viem';
 import { useState, useEffect } from 'react';
@@ -13,6 +14,10 @@ export function UserAirdrop() {
   const [hash, setHash] = useState<`0x${string}` | undefined>();
   const { isLoading, isSuccess, error } = useWaitForTransactionReceipt({ hash });
   const queryClient = useQueryClient();
+
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+  const [showErrorMessage, setShowErrorMessage] = useState(false);
+  const [successHash, setSuccessHash] = useState<`0x${string}` | undefined>();
 
   const tokenAddress = CONTRACTS.TOKEN.address;
   const airdropAddress = CONTRACTS.AIRDROP.address;
@@ -73,6 +78,10 @@ export function UserAirdrop() {
   };
 
   const handleClaim = () => {
+    setShowSuccessMessage(false);
+    setShowErrorMessage(false);
+    setSuccessHash(undefined);
+
     writeContract(
       {
         address: airdropAddress,
@@ -90,12 +99,91 @@ export function UserAirdrop() {
   useEffect(() => {
     if (isSuccess) {
       queryClient.invalidateQueries();
+      setShowSuccessMessage(true); // permanent sucess message
+      setSuccessHash(hash); // Store the successfull hash before reset
       setHash(undefined); // reset hash for next transaction
     }
-  }, [isSuccess, queryClient]);
+  }, [isSuccess, queryClient, hash]);
+
+  useEffect(() => {
+    if (error) {
+      setShowErrorMessage(true); //permanent error message
+      setHash(undefined);
+    }
+  }, [error]);
 
   const handleRefresh = () => {
     queryClient.invalidateQueries();
+    setShowSuccessMessage(false);
+    setShowErrorMessage(false);
+    setSuccessHash(undefined);
+  };
+
+  // Add function to clear messages manually
+  const clearMessages = () => {
+    setShowSuccessMessage(false);
+    setShowErrorMessage(false);
+    setSuccessHash(undefined);
+  };
+
+  const renderTransactionStatus = () => {
+    // Show permanent success message
+    if (showSuccessMessage) {
+      return (
+        <div className="flex items-center gap-2 text-green-600">
+          <CheckCircle className="size-4" />
+          <span>Transaction successful!</span>
+          {successHash && (
+            <a
+              href={`https://sepolia.etherscan.io/tx/${successHash}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1 text-sm text-blue-500 underline hover:text-blue-700"
+            >
+              <ExternalLink className="size-3" />
+              View on Etherscan
+            </a>
+          )}
+          <button onClick={clearMessages} className="text-gray-500 transition-colors hover:text-gray-700">
+            <X className="size-4" />
+          </button>
+        </div>
+      );
+    }
+
+    // Show permanent error message
+    if (showErrorMessage) {
+      return (
+        <div className="flex items-center gap-2 text-red-600">
+          <XCircle className="size-4" />
+          <span>Transaction failed: {error?.message}</span>
+          <button onClick={clearMessages} className="text-gray-500 transition-colors hover:text-gray-700">
+            <X className="size-4" />
+          </button>
+        </div>
+      );
+    }
+
+    // Show transitory states
+    if (isPending) {
+      return (
+        <div className="flex items-center gap-2 text-blue-600">
+          <Loader2 className="size-4 animate-spin" />
+          <span>Transaction pending...</span>
+        </div>
+      );
+    }
+
+    if (isLoading) {
+      return (
+        <div className="flex items-center gap-2 text-yellow-600">
+          <Loader2 className="size-4 animate-spin" />
+          <span>Confirming transaction...</span>
+        </div>
+      );
+    }
+
+    return null;
   };
 
   if (!isConnected) {
@@ -138,6 +226,12 @@ export function UserAirdrop() {
       {/* Claim */}
       <div className="align-center mb-2 flex items-center justify-between gap-4">
         <div className="align-center flex items-center gap-4">
+          {/* Refresh info */}
+          <button onClick={handleRefresh} className="align-center rounded border p-1">
+            Refresh Data
+          </button>
+
+          {/* Claim all */}
           <button
             onClick={handleClaim}
             disabled={!airdropEligibility.data?.[0] || availableAmount === 0n || isPending}
@@ -145,13 +239,9 @@ export function UserAirdrop() {
           >
             {isPending ? 'Claiming...' : 'Claim All'}
           </button>
-
-          <div>
-            {isLoading && <p>Loading transaction...</p>}
-            {isSuccess && <p>Transaction Sucessfull!</p>}
-          </div>
         </div>
 
+        {/* Claimed information */}
         <div className="align-center flex items-center gap-2">
           <p className="mr-1">claimed: </p>
           <div className="flex min-w-[100px] gap-1">
@@ -161,10 +251,8 @@ export function UserAirdrop() {
         </div>
       </div>
 
-      {/* refreshing data */}
-      <button onClick={handleRefresh} className="align-center rounded border p-1">
-        Refresh Data
-      </button>
+      {/* transaction status information */}
+      <div className="mt-2">{renderTransactionStatus()}</div>
     </div>
   );
 }

@@ -24,7 +24,7 @@ contract Airdrop is ReentrancyGuard, Ownable {
     // set airdrop amount for a user - owner only
     function setAirdropAmount(address user, uint256 amount) public onlyOwner {
         require(user != address(0), "Invalid user address");
-        airdropAmounts[user] = amount;
+        airdropAmounts[user] += amount;
         emit AirdropSet(user, amount);
     }
 

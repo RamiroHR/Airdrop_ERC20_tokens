@@ -41,7 +41,7 @@ module.exports = {
   // },
   // Display gas cost of each function during the tests
   gasReporter: {
-    enabled: process.env.REPORT_GAS,
+    enabled: process.env.REPORT_GAS === 'true',
     currency: 'USD'
   }
 };

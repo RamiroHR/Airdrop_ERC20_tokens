@@ -10,6 +10,8 @@ contract DevToken is ERC20, Ownable {
   }
 
   function mint(address to, uint256 amount) external onlyOwner {
+    require(to != address(0), "Cannot mint to zero address");
+    require(amount > 0, "Amount must be greater than zero");
     _mint(to, amount);
   }
 }

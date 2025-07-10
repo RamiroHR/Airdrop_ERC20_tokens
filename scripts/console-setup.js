@@ -1,18 +1,33 @@
 // Setup script - load on the hardhat console, then call the functions
-const tokenName = 'DevToken';
+console.log(`Loading token and Airdrop console helpers...`);
 
-console.log(`Loading ${tokenName} console helpers...`);
+// Determine which env file to use & Load environment variables
+const fs = require('fs');
+const env = process.env.NODE_ENV || 'local';
+const envFile = `.env.${env}`;
+console.log(`\t Loading addresses from ${envFile}`);
+
+// Read the env file
+const envContent = fs.readFileSync(envFile, 'utf8');
+
+// Parse the addresses
+const tokenAddress = envContent.match(/NEXT_PUBLIC_TOKEN_ADDRESS=(.+)/)?.[1];
+const airdropAddress = envContent.match(/NEXT_PUBLIC_AIRDROP_ADDRESS=(.+)/)?.[1];
 
 // Get contract instance
-const tokenAddress = '0x5FbDB2315678afecb367f032d93F642f64180aa3';
-
-const DevToken = await ethers.getContractFactory(tokenName);
+// const tokenAddress = process.env.NEXT_PUBLIC_TOKEN_ADDRESS;
+const DevToken = await ethers.getContractFactory('DevToken');
 const token = DevToken.attach(tokenAddress);
+
+// contracts inatsnace
+// const airdropAddress = process.env.NEXT_PUBLIC_AIRDROP_ADDRESS;
+const Airdrop = await ethers.getContractFactory('Airdrop');
+const airdrop = Airdrop.attach(airdropAddress);
 
 // Get accounts from local node
 const [owner, user1, user2, user3] = await ethers.getSigners();
 
-// Helper functions
+// token Helper functions
 const logBalance = async (address, label = 'Balance') => {
   const balance = await token.balanceOf(address);
   console.log(`${label}: ${ethers.formatEther(balance)} DEV`);
@@ -40,6 +55,35 @@ const testMint = async (toAddress, amount) => {
   return tx;
 };
 
+// airdrop helper functions
+const setupAirdrop = async (user, amount) => {
+  console.log(`\n Setting up airdrop for ${user.address}...`);
+  console.log(`Amount: ${ethers.formatEther(amount)} DEV`);
+
+  const tx = await airdrop.setAirdropAmount(user.address, amount);
+  await tx.wait();
+
+  const hasAirdrop = await airdrop.hasAirdrop(user.address);
+  const airdropAmount = await airdrop.airdropAmounts(user.address);
+
+  console.log(`✅ Airdrop setup complete!`);
+  console.log(`Has airdrop: ${hasAirdrop}`);
+  console.log(`Amount: ${ethers.formatEther(airdropAmount)} DEV`);
+
+  return tx;
+};
+
+const setupTestAirdrops = async () => {
+  console.log('\n 🚀 Setting up test airdrops for all users...');
+
+  await setupAirdrop(user1, ethers.parseEther('1000'));
+  await setupAirdrop(user2, ethers.parseEther('500'));
+  await setupAirdrop(user3, ethers.parseEther('2500'));
+
+  console.log('\n All test airdrops setup complete!');
+  console.log('Now test in the frontend app.');
+};
+
 /// Quick access functions
 global.token = token;
 global.owner = owner;
@@ -49,7 +93,11 @@ global.user3 = user3;
 global.logBalance = logBalance;
 global.logContractInfo = logContractInfo;
 global.testMint = testMint;
+global.airdrop = airdrop;
+global.setupAirdrop = setupAirdrop;
+global.setupTestAirdrops = setupTestAirdrops;
 
-console.log('Console Helpers loadded');
-console.log('Available functions: logContractInfo, tesMint(address, amount), logBalance(address)');
+console.log('Console Helpers loadded \n');
+console.log('Token functions: logContractInfo, tesMint(address, amount), logBalance(address)');
+console.log('Airdrop functions: setupAirdrop(user, amount); setupTestAirdrops()');
 console.log('Available aacounts: owner, user1, user2, user3');

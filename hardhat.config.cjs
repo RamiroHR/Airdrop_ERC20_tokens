@@ -5,7 +5,7 @@ require('@nomicfoundation/hardhat-ignition-ethers');
 require('dotenv/config');
 
 /** @type import('hardhat/config').HardhatUserConfig */
-const config = {
+module.exports = {
   solidity: {
     version: '0.8.20',
     settings: {
@@ -18,22 +18,22 @@ const config = {
   },
   networks: {
     hardhat: {
-      chainId: 31337
+      chainId: 31337 // hardhat standard id
     },
     // local development
     localhost: {
-      url: 'http://127.0.0.1:8545'
+      url: process.env.LOCALHOST_URL || 'http://127.0.0.1:8545'
+    },
+    // tesnet deployment (real word testing scenario)
+    sepolia: {
+      url: process.env.SEPOLIA_URL || '', // should fail if missing
+      accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : []
+    },
+    // mainnet deployment (placeholder only - learning purpose)
+    mainnet: {
+      url: process.env.MAINNET_URL || '', // should fail if missing
+      accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : []
     }
-    // // tesnet deployment (real word testing scenario)
-    // sepolia: {
-    //   url: process.env.SEPOLIA_URL || '',
-    //   accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : []
-    // },
-    // // mainnet deployment (placeholder only - learning purpose)
-    // mainnet: {
-    //   url: process.env.MAINNET_URL || '',
-    //   accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : []
-    // }
   },
   // // To verify the contact in eteherscan automatically
   // etherscan: {
@@ -41,9 +41,7 @@ const config = {
   // },
   // Display gas cost of each function during the tests
   gasReporter: {
-    enabled: process.env.REPORT_GAS !== undefined,
+    enabled: process.env.REPORT_GAS === 'true',
     currency: 'USD'
   }
 };
-
-module.exports = config;

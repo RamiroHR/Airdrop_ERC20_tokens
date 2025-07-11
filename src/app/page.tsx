@@ -1,6 +1,7 @@
 import { ConnectWallet } from '@/components/ConnectWallet';
 import { TokenBalance } from '@/components/TokenBalance';
-import { UserAirdrop } from '@/components/UserAirdrop';
+// import { UserAirdrop } from '@/components/UserAirdrop';
+import { MerkleUserAirdrop } from '@/components/MerkleUserAirdrop';
 import { Flame } from 'lucide-react';
 
 export default function Home() {
@@ -26,7 +27,8 @@ export default function Home() {
         <div className="space-y-4">
           <ConnectWallet />
           <TokenBalance />
-          <UserAirdrop />
+          {/* <UserAirdrop /> */}
+          <MerkleUserAirdrop />
         </div>
       </div>
     </div>

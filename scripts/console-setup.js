@@ -1,8 +1,12 @@
 // Setup script - load on the hardhat console, then call the functions
 console.log(`Loading token and Airdrop console helpers...`);
 
-// Determine which env file to use & Load environment variables
+const { StandardMerkleTree } = require('@openzeppelin/merkle-tree');
 const fs = require('fs');
+// const testWhitelist = require('./whitelist.json');
+const testWhitelist = JSON.parse(fs.readFileSync('./src/config/whitelist.json', 'utf8'));
+
+// Determine which env file to use & Load environment variables
 const env = process.env.NODE_ENV || 'local';
 const envFile = `.env.${env}`;
 console.log(`\t Loading addresses from ${envFile}`);
@@ -15,12 +19,10 @@ const tokenAddress = envContent.match(/NEXT_PUBLIC_TOKEN_ADDRESS=(.+)/)?.[1];
 const airdropAddress = envContent.match(/NEXT_PUBLIC_AIRDROP_ADDRESS=(.+)/)?.[1];
 
 // Get contract instance
-// const tokenAddress = process.env.NEXT_PUBLIC_TOKEN_ADDRESS;
 const DevToken = await ethers.getContractFactory('DevToken');
 const token = DevToken.attach(tokenAddress);
 
-// contracts inatsnace
-// const airdropAddress = process.env.NEXT_PUBLIC_AIRDROP_ADDRESS;
+// contracts instances
 const Airdrop = await ethers.getContractFactory('Airdrop');
 const airdrop = Airdrop.attach(airdropAddress);
 
@@ -84,6 +86,26 @@ const setupTestAirdrops = async () => {
   console.log('Now test in the frontend app.');
 };
 
+const setMerkleRoot = async () => {
+  // build the tree from whitelist
+  const tree = StandardMerkleTree.of(testWhitelist, ['address', 'uint']);
+
+  // get the root
+  const root = tree.root;
+  console.log('Merkle Tree Root: ', root);
+
+  // set merkle root in contract
+  const tx = await airdrop.setMerkleRoot(root);
+  await tx.wait();
+  console.log('Transaction successful with hash: ', tx.hash);
+
+  // verify
+  const currentRoot = await airdrop.merkleRoot();
+  console.log('Current merkle root in contract: ', currentRoot);
+
+  return tree;
+};
+
 /// Quick access functions
 global.token = token;
 global.owner = owner;
@@ -96,8 +118,9 @@ global.testMint = testMint;
 global.airdrop = airdrop;
 global.setupAirdrop = setupAirdrop;
 global.setupTestAirdrops = setupTestAirdrops;
+global.setMerkleRoot = setMerkleRoot;
 
 console.log('Console Helpers loadded \n');
-console.log('Token functions: logContractInfo, tesMint(address, amount), logBalance(address)');
+console.log('Token functions: \n\t logContractInfo, \n\t tesMint(address, amount), \n\t logBalance(address)');
 console.log('Airdrop functions: setupAirdrop(user, amount); setupTestAirdrops()');
-console.log('Available aacounts: owner, user1, user2, user3');
+console.log('Available acounts: owner, user1, user2, user3');

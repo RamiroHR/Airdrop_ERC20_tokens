@@ -47,12 +47,12 @@ export function TokenBalance() {
     return `${formatUnits(value, decimals)} ${symbol}`;
   };
 
-  if (!isConnected) {
+  if (!mounted) {
     return null;
   }
 
-  if (!mounted) {
-    return <div className="h-10 w-32 animate-pulse rounded bg-gray-700"></div>;
+  if (!isConnected) {
+    return null;
   }
 
   if (!visible) {

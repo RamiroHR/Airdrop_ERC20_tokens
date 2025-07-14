@@ -8,6 +8,8 @@ import { useState, useEffect, useCallback } from 'react';
 import { CONTRACTS } from '@/config/contracts';
 
 export function MerkleUserAirdrop() {
+  const [mounted, setMounted] = useState(false);
+
   // Context providers
   const queryClient = useQueryClient();
   const { address, isConnected } = useAccount();
@@ -77,6 +79,10 @@ export function MerkleUserAirdrop() {
       setIsLoadingEligibility(false);
     }
   }, [address]);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     if (isConnected && address) {
@@ -217,6 +223,10 @@ export function MerkleUserAirdrop() {
 
     return null;
   };
+
+  if (!mounted) {
+    return null;
+  }
 
   if (!isConnected) {
     return null;

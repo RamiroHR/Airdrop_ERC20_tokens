@@ -27,7 +27,7 @@ export default function Home() {
         <div className="space-y-4">
           <ConnectWallet />
           <TokenBalance />
-          {/* <UserAirdrop /> */}
+          {/* <UserAirdrop_v0 /> */}
           <MerkleUserAirdrop />
         </div>
       </div>

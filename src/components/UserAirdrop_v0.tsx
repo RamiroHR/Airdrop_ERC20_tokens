@@ -7,7 +7,7 @@ import { formatUnits } from 'viem';
 import { useState, useEffect } from 'react';
 import { CONTRACTS } from '@/config/contracts';
 
-export function UserAirdrop() {
+export function UserAirdrop_v0() {
   const [visible, setVisible] = useState(false);
   const { address, isConnected } = useAccount();
   const { writeContract, isPending } = useWriteContract();

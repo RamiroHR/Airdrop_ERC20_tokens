@@ -1,6 +1,6 @@
 import { ConnectWallet } from '@/components/ConnectWallet';
 import { TokenBalance } from '@/components/TokenBalance';
-// import { UserAirdrop } from '@/components/UserAirdrop';
+// import { UserAirdrop_v0 } from '@/components/UserAirdrop_v0';
 import { MerkleUserAirdrop } from '@/components/MerkleUserAirdrop';
 import { Flame } from 'lucide-react';
 
